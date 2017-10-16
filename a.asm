@@ -2,7 +2,8 @@ assume cs:codesg, ds:datasg, ss:stacksg
 
 datasg segment
     db 16 dup(0)
-    db 'laj linyi qun', 0
+    db 'laji linyi qun', 0
+    db 'i am for the fantacies'
 datasg ends
 
 stacksg segment stack
