@@ -5,6 +5,62 @@
 ;---------------------------------------------
 
 
+
+; 将以0结尾的字符串中的小写字母转化为大写字母
+; 参数
+;   ds:[si] 指向字符串首地址
+; 返回
+;   null
+letterc:
+    push ax
+    push si
+letterc_s:
+    mov al, ds:[si]
+    cmp al, 'a'
+    jb letterc_next             ; 字符ASCii码小于'a'则 continue
+    cmp al, 'z'
+    ja letterc_next             ; 字符ASCii码大于'z'亦 continue
+    and al, 11011111b
+    mov ds:[si], al
+letterc_next:
+    inc si
+    cmp al, 0
+    jne letterc_s               ; 字符不为0则继续读取
+
+    pop si
+    pop ax
+    ret
+
+; 将两个128位的数字相加，结果存储在第一个数字的存储空间
+; 参数
+;   ds:si 指向第一个128位数字 8个字单元
+;   ds:di 指向第二个数字
+; 返回
+;   null
+add128:
+    push ax
+    push cx
+    push si
+    push di
+
+    sub ax, ax             ; 将CF位 置0
+    mov cx, 8
+add128_s:
+    mov ax, ds:[si]
+    adc ax, ds:[di]
+    mov ds:[si], ax
+    inc si                 ; 注意不能用 add 会给CF赋值
+    inc si
+    inc di
+    inc di
+    loop add128_s
+
+    pop di
+    pop si
+    pop cx
+    pop ax
+    ret
+
 ;将word型数据转化为十进制字符串，以0结尾
 ;注意，需要根据数据大小定义相应的栈段大小 推荐 32byte
 ;参数
@@ -79,6 +135,32 @@ divdw:
     mov dx, bx      ;商的高16位
 
     pop bx
+    ret
+
+
+; 清空屏幕
+; 参数
+;   null
+; 返回
+;   null
+clear_screen:
+    push ax
+    push ds
+    push cx
+
+    mov ax, 0b000h
+    mov ds, ax
+    mov ax, 0
+    mov bx, 8000h
+    mov cx, 4000h
+clear_screen_s:
+    mov ds:[bx], ax
+    add bx, 2
+    loop clear_screen_s
+
+    pop cx
+    pop ds
+    pop ax
     ret
 
 
