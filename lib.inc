@@ -1,6 +1,6 @@
 ;---------------------------------------------
 
-;包含一些实用函数
+;一些实用函数
 
 ;---------------------------------------------
 
@@ -145,6 +145,7 @@ divdw:
 ;   null
 clear_screen:
     push ax
+    push bx
     push ds
     push cx
 
@@ -160,6 +161,7 @@ clear_screen_s:
 
     pop cx
     pop ds
+    pop bx
     pop ax
     ret
 
