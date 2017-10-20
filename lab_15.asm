@@ -1,14 +1,12 @@
 ;---------------------------------
 ;
-; file for study and debug
+; 修改原有 int 9 中断例程
+; 按下 ESC 后改变 dos 的颜色，其他按键不受影响
+; 重复安装前运行 reset 恢复原中断向量表!!! 不然会导致无法正常响应键盘输入
 ;
 ;---------------------------------
 
 assume cs:codesg, ds:datasg, ss:stacksg
-
-datasg segment
-    dw 0, 0
-datasg ends
 
 stacksg segment stack
     db 128 dup(0)
@@ -59,7 +57,7 @@ int9:
     mov es, bx
     call dword ptr es:[200h]
 
-    cmp al, 1           ; 要相应的按键对应的扫描码(通码)
+    cmp al, 1                       ; 要响应的按键对应的扫描码(通码)  3bh 为F1键
     jne int9_ret
 
     mov ax, 0b800h

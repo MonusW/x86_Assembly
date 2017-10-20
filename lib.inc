@@ -5,6 +5,28 @@
 ;---------------------------------------------
 
 
+; 延迟函数
+; 参数
+;   dx:循环次数的高16位
+;   ax:循环次数的低16位
+;   推荐 循环 10_0000h 次
+; 返回
+;   null
+delay:
+    push ax
+    push dx
+;    mov dx, 10h     ; 循环 10_0000h 次 可根据自己机器调整
+;    mov ax, 0
+delay_s1:
+    sub ax, 1
+    sbb dx, 0
+    cmp ax, 0
+    jne delay_s1
+    cmp dx, 0
+    jne delay_s1
+    pop dx
+    pop ax
+    ret
 
 ; 将以0结尾的字符串中的小写字母转化为大写字母
 ; 参数
