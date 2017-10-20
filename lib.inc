@@ -5,6 +5,45 @@
 ;---------------------------------------------
 
 
+; al 传送要显示的数据
+show_byte:
+    jmp short show_byte_show
+    table db '0123456789ABCDEF'
+show_byte_show:
+    push ax
+    push bx
+    push es
+
+    mov ah, al
+    shr ah, 1
+    shr ah, 1
+    shr ah, 1
+    shr ah, 1
+    and al, 00001111b
+
+    mov bl, ah
+    mov bh, 0
+    mov ah, table[bx]
+    mov bx, 0b800h
+    mov es, bx
+    mov es:[160*12+2*40], ah
+    mov byte ptr es:[160*12+2*40+1], 01111010b
+
+    mov bl, al
+    mov bh, 0
+    mov al, table[bx]
+    mov bx, 0b800h
+    mov es, bx
+    mov es:[160*12+2*40+2], al
+    mov byte ptr es:[160*12+2*40+3], 01111010b
+
+
+    pop es
+    pop bx
+    pop ax
+    ret
+
+
 ; 延迟函数
 ; 参数
 ;   dx:循环次数的高16位
