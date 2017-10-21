@@ -1,6 +1,6 @@
 ;---------------------------------
 ;
-; file for study and debug
+; 实现简单的接收字符串输入操作，可退格，输入回车结束
 ;
 ;---------------------------------
 
@@ -28,7 +28,7 @@ start:
     mov dl, 5
 
     call getstr
-    
+
     mov ax, 4c00h
     int 21h
 
@@ -38,7 +38,7 @@ getstr:
 getstrs:
     mov ah, 0
     int 16h
-    cmp al, 20h
+    cmp al, 20h         ; 20h 以后才是字符
     jb nochar
     mov ah, 0
     call charstack
@@ -46,9 +46,9 @@ getstrs:
     call charstack
     jmp getstrs
 nochar:
-    cmp ah, 0eh
+    cmp ah, 0eh         ; 退格的扫描码
     je backspace
-    cmp ah, 1ch
+    cmp ah, 1ch         ; 回车的扫描码
     je enter
     jmp getstrs
 
@@ -68,6 +68,11 @@ enter:
     pop ax
     ret
 
+
+; 字符栈操作
+; ah=0 字符入栈 al 为需要入栈的字符
+; ah=1 字符出栈，al为返回的出栈字符
+; ah=2 字符串显示 dh 行, dl 列
 
 charstack:
     jmp charstart
@@ -118,7 +123,7 @@ charshow:
     noempty:
         mov al, [si][bx]
         mov es:[di], al
-        mov al, 00001010b
+        mov al, 00001010b       ;设置字体颜色 这里是高亮绿色
         mov es:[di+1], al
         inc bx
         add di, 2
