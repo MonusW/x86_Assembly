@@ -164,9 +164,9 @@ key_scan:
     cmp   al, 'p'               ;判断是否为p键
     jz   play                   ;是p键就play music
 lookup:
-    cmp   key_t[bx],al ;取出对应频率值
+    cmp   key_t[bx],al          ;取出对应频率值
     je   next
-    inc   bx   ;指针+1
+    inc   bx                    ;指针+1
     jmp   lookup
 next:
     shl   bx,1  ;指针×2,计算频率表指针
