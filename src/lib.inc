@@ -266,7 +266,7 @@ show_str_return:
     pop si
     pop cx
     pop bx
-    pop ds
+    pop es                   ; fuck the bug !!!!  ds -> es
     pop dx
     pop ax
     ret
